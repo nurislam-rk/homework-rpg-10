@@ -1,32 +1,33 @@
 package com.narxoz.rpg.guild;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-/**
- * Topic-based mediator for the Adventurers' Guild war council.
- */
 public class GuildHall implements GuildMediator {
-
-    private final Map<String, List<GuildMember>> membersByTopic = new HashMap<>();
+    private final Map<String, List<GuildMember>> topics = new HashMap<>();
+    private int messageCount = 0;
 
     @Override
     public void register(GuildMember member) {
-        // TODO: add the member to the topic lists it should receive.
+        if (member instanceof Captain) { subscribe("orders", member); subscribe("urgent", member); }
+        if (member instanceof Scout) subscribe("scouting", member);
+        if (member instanceof Healer) subscribe("healing", member);
+        if (member instanceof Quartermaster) subscribe("supplies", member);
+        if (member instanceof Loremaster) subscribe("history", member);
+    }
+
+    private void subscribe(String topic, GuildMember member) {
+        topics.computeIfAbsent(topic, k -> new ArrayList<>()).add(member);
     }
 
     @Override
     public void dispatch(String topic, GuildMember from, String payload) {
-        // TODO: notify registered members for the topic without direct colleague calls.
+        List<GuildMember> subs = topics.getOrDefault(topic, List.of());
+        for (GuildMember sub : subs) {
+            if (sub != from) {
+                sub.receive(topic, from, payload);
+                messageCount++;
+            }
+        }
     }
 
-    protected void addSubscriber(String topic, GuildMember member) {
-        membersByTopic.computeIfAbsent(topic, key -> new ArrayList<>()).add(member);
-    }
-
-    protected List<GuildMember> subscribersFor(String topic) {
-        return membersByTopic.getOrDefault(topic, List.of());
-    }
+    public int getMessageCount() { return messageCount; }
 }
