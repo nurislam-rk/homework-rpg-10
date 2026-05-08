@@ -1,38 +1,18 @@
 package com.narxoz.rpg.council;
 
-/**
- * Summary of a guild war council planning run.
- */
 public class CouncilRunResult {
-
     private final int questsTraversed;
     private final int messagesRouted;
     private final int membersNotified;
 
-    public CouncilRunResult(int questsTraversed, int messagesRouted, int membersNotified) {
-        this.questsTraversed = questsTraversed;
-        this.messagesRouted = messagesRouted;
-        this.membersNotified = membersNotified;
-    }
-
-    public int getQuestsTraversed() {
-        return questsTraversed;
-    }
-
-    public int getMessagesRouted() {
-        return messagesRouted;
-    }
-
-    public int getMembersNotified() {
-        return membersNotified;
+    public CouncilRunResult(int q, int m, int n) {
+        this.questsTraversed = q;
+        this.messagesRouted = m;
+        this.membersNotified = n;
     }
 
     @Override
     public String toString() {
-        return "CouncilRunResult{"
-                + "questsTraversed=" + questsTraversed
-                + ", messagesRouted=" + messagesRouted
-                + ", membersNotified=" + membersNotified
-                + '}';
+        return "CouncilRunResult{quests=" + questsTraversed + ", messages=" + messagesRouted + ", members=" + membersNotified + "}";
     }
 }
